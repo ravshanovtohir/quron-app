@@ -47,33 +47,21 @@ input.addEventListener("keyup", (e) => {
 
                 let index = 0
 
-                function readQuran(index) {
+                button.addEventListener("click", () => {
+                    let index = 0
                     wrapper.innerHTML = null
-                    let actives = document.querySelectorAll('.active')
-                    actives.forEach(el => el.classList.remove('active'))
-                    let items = document.querySelectorAll('li')
-                    items[index].classList.add('active')
-                    items[index].style.color = "green";
-                    let audio = document.createElement('audio')
-                    let source = document.createElement('source')
-                    source.src = surah.data.verses[index].audio.primary
-                    audio.append(source)
-                    wrapper.append(audio)
-                    audio.play()
-                    audio.onended = () => {
-                        if (index < surah.data.verses.length) {
-                            items[index].style.color = 'black'
-                            return readQuran(index + 1)
-                        }
+                    let audioEl = document.createElement("audio")
+                    let audio = surah.data.verses[index++].audio.primary
+                    audioEl.src = audio
+                    wrapper.append(audioEl)
+                    audioEl.play()
+
+                    audioEl.onended = () => {
+                        if (index >= surah.data.verses.length) return
+                        audioEl.src = surah.data.verses[index++].audio.primary
+                        audioEl.play()
                     }
-                }
-                read.onclick = () => {
-                    let li = document.querySelectorAll('li')
-                    li.forEach(li => {
-                        li.style.color = 'black'
-                    })
-                    readQuran(index)
-                }
+                })
 
             }
             request()
